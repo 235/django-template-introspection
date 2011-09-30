@@ -30,7 +30,12 @@ class TemplateIntrospect(object):
             f = open( os.path.join(path, fname) , 'r')
             content = f.read()
             f.close()
-            return content
+            if fname.endswith('.js'):
+                return '<script type="text/javascript">' + content + '</script>'
+            elif fname.endswith('.css'):
+                return '<style type="text/css" /> ' + content + '</style>'
+            else:
+               return content
         return '<script type="text/javascript"> var dhash=' + \
                json.dumps(globals.tdebug) + \
                '; </script>' + \
