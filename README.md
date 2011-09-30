@@ -14,4 +14,9 @@ Django Template Introspection
  - Add `django_template_introspection` to the `INSTALLED_APPS`
  - Add `django_template_introspection.middleware.TemplateIntrospect` to the `MIDDLEWARE_CLASSES`.
  - Requires jQuery to be included. If you don't have it jet, add this to your base template after `<HEAD>` :
+
          `<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js">`
+
+### TODO
+ - preserve the order of templates inclusion in resulting output (js problem?)
+ - override the template-tag generator to mark template tags in the output also (they are processed in a single execution of template renderer therefore they are notcurrently highligter. However, this is a distinct chunk of code and has to be showed separately) 
