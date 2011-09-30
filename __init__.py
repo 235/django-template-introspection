@@ -36,52 +36,56 @@ def enhanced_init(old_init):
 
 def render(self, context):
     """ New render that saves metadata and annotate produces tags """
-    #print self.origin, self.name
-    #Inspect the trace tree, collect usuful data
-    tree = []
-    frame = inspect.currentframe().f_back
-    #skip excluded and only then gather few hops
-    while frame.f_back and frame.f_code.co_filename.startswith(EXCLUDE_PATHS):
-        frame = frame.f_back
-    for i in range(1, 3):
-        if frame.f_code.co_filename.startswith(EXCLUDE_PATHS):
+    def nice_inspect():
+        """ Inspect the trace tree, collect usuful data """
+        tree = []
+        frame = inspect.currentframe().f_back
+        #skip excluded and only then gather few hops
+        while frame.f_back and frame.f_code.co_filename.startswith(EXCLUDE_PATHS):
             frame = frame.f_back
-            continue
-        trace = inspect.getframeinfo(frame)
-        filename = os.path.relpath(trace.filename, settings.SITE_BASEDIR)
-        formatted = TRACE_TEMPLATE % { 'file': filename, 
-                                       'line': trace.lineno, 
-                                       'func': trace.function, 
-                                       'code': "<br/>".join(trace.code_context)}
-        tree.append( formatted.replace("'", '"') )
-        frame = frame.f_back
- 
-    #add current rendering event to the global metadata with a hash
-    info = {'origin': os.path.relpath(str(self.origin), settings.SITE_BASEDIR),
-            #'name':   str(self.name),
-            'tree': "<br/>".join(tree)}
-    dhash = md5(str(info['origin'])).hexdigest()
-    GLOBALS.tdebug[dhash] = info
-
-    #The only line from the original method - the rendering itself
-    render_result = self.nodelist.render(context)
-   
-    #add an attribute to each HTML-tag with a given hash or update existing
-    #WARNING: if the produced HTML is invalid, BeautifulSoup will try to fix it
-    soup = BeautifulSoup(render_result) 
-    tags_gen = soup.recursiveChildGenerator()
-    while True:
-        try:
-            tag = tags_gen.next()
-            if not isinstance(tag, Tag):
+        for i in range(1, 3):
+            if frame.f_code.co_filename.startswith(EXCLUDE_PATHS):
+                frame = frame.f_back
                 continue
-            if tag.has_key('dhash') and dhash not in tag['dhash'].split(' '): 
-                tag['dhash'] = tag['dhash'] + ' ' + dhash
-            else:
-                tag['dhash'] = dhash
-        except StopIteration:
-            break    
-    return unicode(soup)
+            trace = inspect.getframeinfo(frame)
+            filename = os.path.relpath(trace.filename, settings.SITE_BASEDIR)
+            formatted = TRACE_TEMPLATE % { 'file': filename, 
+                                           'line': trace.lineno, 
+                                           'func': trace.function, 
+                                       'code': "<br/>".join(trace.code_context)}
+            tree.append( formatted.replace("'", '"') )
+            frame = frame.f_back
+        return tree
+
+    def insert_metadata(tree, output):
+        """ Add current rendering event to the global metadata, annotate output """
+        info = {'origin': os.path.relpath(str(self.origin), settings.SITE_BASEDIR),
+                #'name':   str(self.name),
+                'tree': "<br/>".join(tree)}
+        dhash = md5(str(info['origin'])).hexdigest()
+        GLOBALS.tdebug[dhash] = info
+
+        #add an attribute to each HTML-tag with a given hash or update existing
+        #WARNING: if the produced HTML is invalid, BeautifulSoup will try to fix it
+        soup = BeautifulSoup(output) 
+        tags_gen = soup.recursiveChildGenerator()
+        while True:
+            try:
+                tag = tags_gen.next()
+                if not isinstance(tag, Tag):
+                    continue
+                if tag.has_key('dhash') and dhash not in tag['dhash'].split(' '): 
+                    tag['dhash'] = tag['dhash'] + ' ' + dhash
+                else:
+                    tag['dhash'] = dhash
+            except StopIteration:
+                break
+        return unicode(soup)
+    
+    tree = nice_inspect()
+    #The only line from the original method - the rendering itself
+    output = self.nodelist.render(context)
+    return insert_metadata(tree, output)
 
 #Monkey-patching itself
 Template.__init__ = enhanced_init(Template.__init__)
