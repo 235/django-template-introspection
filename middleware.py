@@ -2,7 +2,7 @@ from django_template_introspection import globals
 from django.conf import settings
 import re, os, json
 
-insert_files = ('js/insertion.js', 'js/jquery.jgrowl_minimized.js', 'js/jquery.jgrowl.css')
+insert_files = ('js/insertion.html', 'js/jquery.jgrowl_minimized.js', 'js/jquery.jgrowl.css')
 
 class TemplateIntrospect(object):
     #create empty meta-data storage
