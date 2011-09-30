@@ -8,7 +8,7 @@ Django Template Introspection
 
   And yes, it allows you to find the roots of all content on a page visually in your browser:
 
-  ![Screen sample](http://sumno.com.ua/media/images/galleries/2008/11/01/dlya-publikatsij/menu015.png "Sample usage")
+  ![Screen sample](http://sumno.com.ua/media/images/galleries/2008/11/01/dlya-publikatsij/djangotemplateintrospection.png "Sample usage")
 
 ### Installation
  - Download the source, add place `django_template_introspection` somewhere in yours python path.
