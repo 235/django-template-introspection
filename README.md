@@ -13,4 +13,5 @@ Django Template Introspection
  - Download the source, add place `django_template_introspection` somewhere in yours python path.
  - Add `django_template_introspection` to the `INSTALLED_APPS`
  - Add `django_template_introspection.middleware.TemplateIntrospect` to the `MIDDLEWARE_CLASSES`.
-
+ - Requires jQuery to be included. If you don't have it jet, add this to your base template after `<HEAD>` :
+         `<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js">`
