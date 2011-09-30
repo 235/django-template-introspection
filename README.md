@@ -18,5 +18,5 @@ Django Template Introspection
          `<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js">`
 
 ### TODO
- - preserve the order of templates inclusion in resulting output (js problem?)
- - override the template-tag generator to mark template tags in the output also (they are processed in a single execution of template renderer therefore they are notcurrently highligter. However, this is a distinct chunk of code and has to be showed separately) 
+ - preserve the order of templates inclusion in resulting output (is it a js problem?)
+ - override the template-tag generator to mark template tags in the output also. They are processed in a single execution of the template renderer therefore are not currently highlighted. However, this is a distinct chunk of code and has to be showed separately.
