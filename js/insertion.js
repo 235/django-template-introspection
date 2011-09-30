@@ -87,6 +87,12 @@ function Overlay(width, height, left, top) {
 
 // test
 var box = new Overlay(2, 2, 5, 5);
+$.jGrowl.defaults.closer = false;
+$.jGrowl.defaults.check = 30;
+$.jGrowl.defaults.openDuration = 0;
+$.jGrowl.defaults.closeDuration = 0;
+$.jGrowl.defaults.speed = 0;
+
 
 var cspTimer;
 function prepareChangeSearchParam(e, el) {
@@ -102,9 +108,6 @@ function prepareChangeSearchParam(e, el) {
             $.jGrowl(dhash[hashes[i]].tree , 
                      { header: 'Template:'+dhash[hashes[i]].origin, 
                        sticky: true,
-                       speed: 0,
-		       animateOpen: { opacity: 'show' },
-		       animateClose: { opacity: 'hide' },
                      });
         }
     }, 600);
