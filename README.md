@@ -19,9 +19,10 @@ Django Template Introspection
          <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js">
 
 ### TODO
- - clean-up js code
- - preserve the order of templates inclusion in resulting output (is it a js problem?)
- - override the template-tag generator to mark template tags in the output also. They are processed in a single execution of the template renderer therefore are not currently highlighted. However, this is a distinct chunk of code and has to be showed separately.
+ - move settings to `settings.py`, implement activation of the app according to the value of `TEMPLATE_DEBUG`
+ - clean-up js code (replace pop-up plugin?)
+ - preserve the order of templates inclusion in the resulting output (is it a js problem?)
+ - override the template-tag generator to mark template-tags in the inspection output also. They are processed during a template rendering and therefore are not currently highlighted. However, they are distinct chunks of code and have to be shown separately.
 
 ### Credits
  - using [jGrowl](http://stanlemon.net/projects/jgrowl.html) for nice pop-ups
