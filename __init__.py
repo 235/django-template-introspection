@@ -8,22 +8,23 @@ try:
 except ImportError:
     from django.utils._threading_local import local
 
-#Create a global variable that will be visible in modified template render 
-#here we store all metadata about produced output
+#Create a global variable that will be visible in a modified template render 
+#here we store all provanence traces of the produced output
 GLOBALS = local()
 
 #Collect paths to modules that have to be excluded from a trace tree: 
-#exclude django & current module
+#exclude django & the current module
 import django
 EXCLUDE_PATHS = (django.__file__.split('__init__')[0] , 
                  __file__.split('__init__')[0] )
-#template of each trace chunk
+
+#template of formating each trace chunk
 TRACE_TEMPLATE = """<i>%(file)s</i><br/>
 		    &nbsp;&nbsp;#%(line)s: %(func)s()<br/>
 		    &nbsp;&nbsp;<small>%(code)s</small>"""
 
 ###Django template engine monkey-patching
-#we enable meta-data collection in its runtime
+#we enable provanence collection in its runtime
 def enhanced_init(old_init):
     """ Decorator over the original init in order to store the template name """
     def new_init(self, template_string, origin=None, name='<Unknown Template>'):

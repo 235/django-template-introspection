@@ -1,8 +1,8 @@
 Django Template Introspection
 =============================
-  - Turn it on
+  - Turn it on (however, don't do this on production)
   - Investigate the HTML output in your browser
-  - Find out where each HTML tag was generated (its template & view)
+  - Find out where each HTML tag was generated (its template & view function)
 
   Did you ever had a project where you don't remember where exactly required code is hidden? This project is developed with an idea *to help a developer in finding exactly which view(function) and using which template has generated every HTML tag in a resulting output*.
 
