@@ -1,3 +1,4 @@
+from settings import DTI_DEBUG, DTI_TRACE_TEMPLATE
 from django.conf import settings
 from django.template import Template, StringOrigin
 from BeautifulSoup import BeautifulSoup, Tag
@@ -18,10 +19,6 @@ import django
 EXCLUDE_PATHS = (django.__file__.split('__init__')[0] , 
                  __file__.split('__init__')[0] )
 
-#template of formating each trace chunk
-TRACE_TEMPLATE = """<i>%(file)s</i><br/>
-		    &nbsp;&nbsp;#%(line)s: %(func)s()<br/>
-		    &nbsp;&nbsp;<small>%(code)s</small>"""
 
 ###Django template engine monkey-patching
 #we enable provanence collection in its runtime
@@ -50,10 +47,10 @@ def render(self, context):
                 continue
             trace = inspect.getframeinfo(frame)
             filename = os.path.relpath(trace.filename, settings.SITE_BASEDIR)
-            formatted = TRACE_TEMPLATE % { 'file': filename, 
+            formatted = DTI_TRACE_TEMPLATE % { 'file': filename, 
                                            'line': trace.lineno, 
                                            'func': trace.function, 
-                                       'code': "<br/>".join(trace.code_context)}
+                                           'code': "<br/>".join(trace.code_context)}
             tree.append( formatted.replace("'", '"') )
             frame = frame.f_back
         return tree
@@ -88,7 +85,8 @@ def render(self, context):
     output = self.nodelist.render(context)
     return insert_metadata(tree, output)
 
-#Monkey-patching itself
-Template.__init__ = enhanced_init(Template.__init__)
-Template.render = render
+if DTI_DEBUG:
+    #Monkey-patching itself
+    Template.__init__ = enhanced_init(Template.__init__)
+    Template.render = render
 
