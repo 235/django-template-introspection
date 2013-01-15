@@ -10,117 +10,106 @@
 var jQueryD = jQuery.noConflict(true);
 
 jQueryD(document).ready(function(){
-
-/**
- * This object encapsulates the elements and actions of the overlay.
- * http://stackoverflow.com/questions/4711023/how-to-make-this-javascript-much-faster/4711224#4711224
- */
-function Overlay(width, height, left, top) {
-    this.width = this.height = this.left = this.top = 0;
+  /* This object encapsulates the elements and actions of the overlay.
+   * http://stackoverflow.com/questions/4711023/how-to-make-this-javascript-much-faster/4711224#4711224
+   */
+  function Overlay(width, height, left, top) {
+      this.width = this.height = this.left = this.top = 0;
+    
+      // outer parent
+      var outer = jQueryD("<div class='outer' />").appendTo("body");
+      // red lines (boxes)
+      var topbox    = jQueryD("<div />").css("height", 1).appendTo(outer);
+      var bottombox = jQueryD("<div />").css("height", 1).appendTo(outer);  
+      var leftbox   = jQueryD("<div />").css("width",  1).appendTo(outer);
+      var rightbox  = jQueryD("<div />").css("width",  1).appendTo(outer);
+    
+      // don't count it as a real element
+      outer.mouseover(function(){ 
+          outer.hide(); 
+      });
+    
+    
+      /* Public interface  */
+      this.resize = function resize(width, height, left, top) {
+        if (width != null)
+          this.width = width;
+        if (height != null)
+          this.height = height;
+        if (left != null)
+          this.left = left;
+        if (top != null)
+          this.top = top;
+      };
+   
+      this.show = function show() {
+         outer.show(); };
+               
+      this.hide = function hide() {
+         outer.hide(); };     
   
-    // outer parent
-    var outer = jQueryD("<div class='outer' />").appendTo("body");
-    // red lines (boxes)
-    var topbox    = jQueryD("<div />").css("height", 1).appendTo(outer);
-    var bottombox = jQueryD("<div />").css("height", 1).appendTo(outer);  
-    var leftbox   = jQueryD("<div />").css("width",  1).appendTo(outer);
-    var rightbox  = jQueryD("<div />").css("width",  1).appendTo(outer);
+      this.render = function render(width, height, left, top) {
+          this.resize(width, height, left, top);
   
-    // don't count it as a real element
-    outer.mouseover(function(){ 
-        outer.hide(); 
-    });
+          topbox.css({
+            top:   this.top,
+            left:  this.left,
+            width: this.width });
+          bottombox.css({
+            top:   this.top + this.height - 1,
+            left:  this.left,
+            width: this.width });
+          leftbox.css({
+            top:    this.top, 
+            left:   this.left, 
+            height: this.height });
+          rightbox.css({
+            top:    this.top, 
+            left:   this.left + this.width - 1, 
+            height: this.height });
+            
+          this.show();
+      };      
+  
+      // initial rendering [optional]
+      this.render(width, height, left, top);
+  }
+    
+  
+  // test
+  var box = new Overlay(2, 2, 5, 5);
+  $.jGrowl.defaults.closer = false;
+  $.jGrowl.defaults.check = 30;
+  $.jGrowl.defaults.openDuration = 0;
+  $.jGrowl.defaults.closeDuration = 0;
+  $.jGrowl.defaults.speed = 0;
   
   
-    /* Public interface  */
+  var cspTimer;
+  function prepareChangeSearchParam(e, el) {
+      if (cspTimer)
+          clearTimeout(cspTimer);
+      cspTimer = setTimeout(function() {
+          $.jGrowl('close');
   
-    this.resize = function resize(width, height, left, top) {
-      if (width != null)
-        this.width = width;
-      if (height != null)
-        this.height = height;
-      if (left != null)
-        this.left = left;
-      if (top != null)
-        this.top = top;      
-    };
- 
-    this.show = function show() {
-       outer.show();
-    };
-             
-    this.hide = function hide() {
-       outer.hide();
-    };     
-
-    this.render = function render(width, height, left, top) {
-        
-        this.resize(width, height, left, top);
-
-        topbox.css({
-          top:   this.top,
-          left:  this.left,
-          width: this.width
-        });
-        bottombox.css({
-          top:   this.top + this.height - 1,
-          left:  this.left,
-          width: this.width
-        });
-        leftbox.css({
-          top:    this.top, 
-          left:   this.left, 
-          height: this.height
-        });
-        rightbox.css({
-          top:    this.top, 
-          left:   this.left + this.width - 1, 
-          height: this.height  
-        });
-          
-        this.show();
-    };      
-
-    // initial rendering [optional]
-    this.render(width, height, left, top);
-}
+          el_dhash = el.attr('dhash');
+          if (!el_dhash) {return;};
+          hashes = el_dhash.split(' ');
+          for ( var i=0, len=hashes.length; i<len; ++i ){
+              $.jGrowl(dhash[hashes[i]].tree , 
+                       { header: 'Template:'+dhash[hashes[i]].origin, 
+                         sticky: true,
+                       });
+          }
+      }, 600);
+  }
   
-
-// test
-var box = new Overlay(2, 2, 5, 5);
-$.jGrowl.defaults.closer = false;
-$.jGrowl.defaults.check = 30;
-$.jGrowl.defaults.openDuration = 0;
-$.jGrowl.defaults.closeDuration = 0;
-$.jGrowl.defaults.speed = 0;
-
-
-var cspTimer;
-function prepareChangeSearchParam(e, el) {
-    if (cspTimer)
-        clearTimeout(cspTimer);
-    cspTimer = setTimeout(function() {
-        $.jGrowl('close');
-
-        el_dhash = el.attr('dhash');
-        if (!el_dhash) {return;};
-        hashes = el_dhash.split(' ');
-        for ( var i=0, len=hashes.length; i<len; ++i ){
-            $.jGrowl(dhash[hashes[i]].tree , 
-                     { header: 'Template:'+dhash[hashes[i]].origin, 
-                       sticky: true,
-                     });
-        }
-    }, 600);
-}
-
-jQueryD("body").mouseover(function(e){
-   var el = jQueryD(e.target);
-   var offset = el.offset();
-   box.render(el.outerWidth(), el.outerHeight(), offset.left, offset.top);
-   prepareChangeSearchParam(e, el);
-});
+  jQueryD("body").mouseover(function(e){
+     var el = jQueryD(e.target);
+     var offset = el.offset();
+     box.render(el.outerWidth(), el.outerHeight(), offset.left, offset.top);
+     prepareChangeSearchParam(e, el);
+  });
 
 });
-
 </script>
