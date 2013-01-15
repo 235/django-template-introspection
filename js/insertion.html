@@ -3,28 +3,28 @@
   .outer div { position:absolute; background:rgb(255,0,0); z-index:65000; }
 </style> 
 
-<!-- Grab CDN jQuery, with a protocol relative URL if it was not included in a main project -->
-<script>window.jQuery || document.write('<script src="//ajax.aspnetcdn.com/ajax/jQuery/jquery-1.7.min.js"><\/script>') </script>
-
+<!-- Grab CDN jQuery, the version which compatable with our library -->
+<script src="//ajax.aspnetcdn.com/ajax/jQuery/jquery-1.7.min.js"></script>
 <script type="text/javascript">
-jQuery(document).ready(function(){
+/* Rename the version we need for our plugin */
+var jQueryD = jQuery.noConflict(true);
+
+jQueryD(document).ready(function(){
 
 /**
  * This object encapsulates the elements and actions of the overlay.
  * http://stackoverflow.com/questions/4711023/how-to-make-this-javascript-much-faster/4711224#4711224
  */
 function Overlay(width, height, left, top) {
-  
     this.width = this.height = this.left = this.top = 0;
   
     // outer parent
-    var outer = jQuery("<div class='outer' />").appendTo("body");
-    
+    var outer = jQueryD("<div class='outer' />").appendTo("body");
     // red lines (boxes)
-    var topbox    = jQuery("<div />").css("height", 1).appendTo(outer);
-    var bottombox = jQuery("<div />").css("height", 1).appendTo(outer);  
-    var leftbox   = jQuery("<div />").css("width",  1).appendTo(outer);
-    var rightbox  = jQuery("<div />").css("width",  1).appendTo(outer);
+    var topbox    = jQueryD("<div />").css("height", 1).appendTo(outer);
+    var bottombox = jQueryD("<div />").css("height", 1).appendTo(outer);  
+    var leftbox   = jQueryD("<div />").css("width",  1).appendTo(outer);
+    var rightbox  = jQueryD("<div />").css("width",  1).appendTo(outer);
   
     // don't count it as a real element
     outer.mouseover(function(){ 
@@ -32,9 +32,7 @@ function Overlay(width, height, left, top) {
     });
   
   
-    /**
-     * Public interface
-     */
+    /* Public interface  */
   
     this.resize = function resize(width, height, left, top) {
       if (width != null)
@@ -116,8 +114,8 @@ function prepareChangeSearchParam(e, el) {
     }, 600);
 }
 
-jQuery("body").mouseover(function(e){
-   var el = jQuery(e.target);
+jQueryD("body").mouseover(function(e){
+   var el = jQueryD(e.target);
    var offset = el.offset();
    box.render(el.outerWidth(), el.outerHeight(), offset.left, offset.top);
    prepareChangeSearchParam(e, el);

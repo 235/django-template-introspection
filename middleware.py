@@ -51,9 +51,8 @@ class TemplateIntrospect(object):
     @staticmethod
     def form_introspec_data():
         """ Format insetion block """
-        bindings_template = \
-            '<script type="text/javascript"> var dhash= %(bindings)s; </script>' + \
-            reduce(lambda x,y: x+'\n'+y, [read(i) for i in INSERT_FILES])
-        return bindings_template % { 'bindings' : json.dumps(GLOBALS.tdebug)
+        return '<script type="text/javascript"> var dhash= %s; </script>' % json.dumps(GLOBALS.tdebug) + \
+               reduce(lambda x,y: x+'\n'+y, [read_scripts(i) for i in INSERT_FILES])
+
 
 
