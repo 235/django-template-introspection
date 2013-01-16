@@ -1,7 +1,7 @@
 from django.conf import settings
 import os
 
-if hasattr(settings, 'DTI_DEBUG'): 
+if hasattr(settings, 'DTI_DEBUG'):
     DTI_DEBUG = settings.DTI_DEBUG
 else:
     DTI_DEBUG = True
@@ -23,4 +23,3 @@ DTI_TRACE_TEMPLATE = hasattr(settings, 'DTI_TRACE_TEMPLATE') and settings.DTI_TR
                     """<i>%(file)s</i><br/>
                     &nbsp;&nbsp;#%(line)s: %(func)s()<br/>
                     &nbsp;&nbsp;<small>%(code)s</small>"""
-
