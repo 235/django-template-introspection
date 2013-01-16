@@ -15,6 +15,7 @@ Django Template Introspection
 For example, drop this to your `settings.py` somewhere to the very bottom (better to your `settings-local.py`):
     ```
       MIDDLEWARE_CLASSES += ('django_template_introspection.middleware.TemplateIntrospect',)
+
       INSTALLED_APPS += ('django_template_introspection',)
     ```
   - set `DTI_DEBUG = True`
