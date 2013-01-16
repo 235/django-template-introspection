@@ -1,25 +1,33 @@
 Django Template Introspection
 =============================
-  - Turn it on (however, don't do this on production)
-  - Investigate the HTML output in your browser
-  - Find out where each HTML tag was generated (its template & view function)
+  Did you ever had a web project which gave you hard times to find which bit of code generates the output?
+  This project is developed with an idea *to help a developer in finding exact
+  view(function) and template wich were used to generat every HTML tag in a resulting output*.
 
-  Did you ever had a project where you don't remember where exactly required code is hidden? This project is developed with an idea *to help a developer in finding exactly which view(function) and using which template has generated every HTML tag in a resulting output*.
-
-  And yes, it allows you to find the roots of all content on a page visually in your browser:
+  And yes, it allows you to find the roots of all your content on a page visually in a browser:
 
   ![Screen sample](http://sumno.com.ua/media/images/galleries/2008/11/01/dlya-publikatsij/djangotemplateintrospection.png "Sample usage")
 
-### Installation
- - Download the source, add place `django_template_introspection` somewhere in yours python path.
- - Add `django_template_introspection` to the `INSTALLED_APPS`.
- - Add `django_template_introspection.middleware.TemplateIntrospect` to the `MIDDLEWARE_CLASSES`.
- - Requires jQuery to be included. If you don't have it jet, add this to your base template after `<HEAD>` :
 
-         <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js">
+### Installation
+  - Download the source, add drop `django_template_introspection` somewhere in the python path
+  - Add `django_template_introspection` to the `INSTALLED_APPS` and `django_template_introspection.middleware.TemplateIntrospect` to the `MIDDLEWARE_CLASSES`.
+For example, drop this to your `settings.py` somewhere to the very bottom (better to your `settings-local.py`):
+    ```
+      MIDDLEWARE_CLASSES += ('django_template_introspection.middleware.TemplateIntrospect',)
+      INSTALLED_APPS += ('django_template_introspection',)
+    ```
+  - set `DTI_DEBUG = True`
+  
+Done! Next, you can:
+  - Investigate the HTML output in your browser
+  - Find out where each HTML tag was generated (its template & view function)
+
+### Notes
+  - Requires jQuery which is taken from a CDN, so it requires connection to Internet. Easy to fix
+ 
 
 ### TODO
- - move settings to `settings.py`, implement activation of the app according to the value of `TEMPLATE_DEBUG`
  - clean-up js code (replace pop-up plugin?)
  - preserve the order of templates inclusion in the resulting output (is it a js problem?)
  - override the template-tag generator to mark template-tags in the inspection output also. They are processed during a template rendering and therefore are not currently highlighted. However, they are distinct chunks of code and have to be shown separately.
