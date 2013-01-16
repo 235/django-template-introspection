@@ -13,12 +13,15 @@ Django Template Introspection
   - Download the source, add drop `django_template_introspection` somewhere in the python path
   - Add `django_template_introspection` to the `INSTALLED_APPS` and `django_template_introspection.middleware.TemplateIntrospect` to the `MIDDLEWARE_CLASSES`.
 For example, drop this to your `settings.py` somewhere to the very bottom (better to your `settings-local.py`):
-    ```
-      MIDDLEWARE_CLASSES += ('django_template_introspection.middleware.TemplateIntrospect',)
 
-      INSTALLED_APPS += ('django_template_introspection',)
-    ```
-  - set `DTI_DEBUG = True`
+```python
+DTI_DEBUG = True
+if DTI_DEBUG:
+    MIDDLEWARE_CLASSES += ('django_template_introspection.middleware.TemplateIntrospect',)
+    INSTALLED_APPS += ('django_template_introspection',)
+```
+
+
   
 Done! Next, you can:
   - Investigate the HTML output in your browser
